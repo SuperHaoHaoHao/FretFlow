@@ -1,0 +1,99 @@
+.score-title { display: flex; justify-content: space-between; align-items: center; gap: 30px; padding: 0 4px 20px; }
+.score-title h3 { margin: 6px 0 0; font-size: 32px; letter-spacing: -.05em; }
+.score-title > p { max-width: 550px; color: var(--muted); font-size: 11px; line-height: 1.75; }
+.melody-score, .chord-practice-score { display: flex; flex-direction: column; gap: 14px; }
+.score-player-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 11px; padding: 13px; background: var(--card); border: 1px solid rgba(19,35,54,.08); border-radius: 14px; }
+.player-main-buttons { display: flex; gap: 6px; align-items: center; }
+.score-player-toolbar > .range-label { flex: 1; min-width: 170px; }
+.select-loop { min-height: 35px; display: flex; align-items: center; gap: 5px; padding: 0 8px; border: 1px solid #dcdfd9; border-radius: 8px; background: #fff; color: var(--muted); }
+.select-loop select { border: 0; background: transparent; color: var(--muted); font-size: 10px; max-width: 130px; }
+.score-progress { display: flex; align-items: center; gap: 15px; color: var(--muted); font-size: 10px; }
+.score-progress > span { white-space: nowrap; }
+.score-progress progress { flex: 1; height: 5px; accent-color: var(--coral); }
+.score-sheet { background: #fffefa; border: 1px solid #e0ded4; border-radius: 17px; padding: 24px; box-shadow: 0 14px 40px rgba(40,45,40,.06); background-image: radial-gradient(#d8d6cc .55px, transparent .55px); background-size: 7px 7px; }
+.sheet-header { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 17px; border-bottom: 2px solid var(--ink); margin-bottom: 18px; }
+.sheet-header span { font-size: 12px; font-weight: 800; }
+.sheet-header b { font-family: "Songti SC", "SimSun", serif; color: #7b7b70; font-size: 13px; font-weight: 500; }
+.score-bars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 22px; }
+.score-bar { display: grid; grid-template-columns: 35px 1fr; min-height: 175px; border: 1px solid transparent; border-radius: 10px; padding: 7px; transition: background .2s, border-color .2s; }
+.score-bar.current { background: rgba(119,228,212,.08); border-color: #b5ded3; }
+.bar-number { color: #9a9a8e; font-family: ui-monospace, monospace; font-size: 10px; padding-top: 7px; }
+.bar-number span { display: block; font-family: inherit; font-size: 8px; margin-top: 3px; }
+.bar-events { display: flex; align-items: stretch; border-right: 2px solid #6b6f6b; }
+.melody-note { min-width: 25px; border: 0; border-left: 1px solid #eeeae0; background: rgba(255,254,250,.88); padding: 6px 2px 3px; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
+.melody-note:first-child { border-left: 0; }
+.melody-note:hover { background: #edf5f0; }
+.melody-note.active { background: #ffe5da; border-radius: 6px; color: #a84f3c; z-index: 2; box-shadow: 0 0 0 1px var(--coral); }
+.note-syllable { height: 26px; font-family: ui-monospace, monospace; font-size: 19px; }
+.note-duration { height: 8px; font-size: 9px; display: grid; place-items: center; }
+.note-duration.is-eighth::after { content: ""; width: 15px; height: 2px; background: currentColor; }
+.six-lines { display: flex; flex-direction: column; width: 100%; margin-top: 6px; }
+.six-lines i { height: 16px; border-bottom: 1px solid #b7b8b0; display: grid; place-items: center; font-family: ui-monospace, monospace; font-size: 10px; font-style: normal; font-weight: 700; }
+.six-lines i:first-child { border-top: 1px solid #b7b8b0; }
+.melody-note > small { color: #a0a094; font-size: 7px; margin-top: 5px; }
+.current-note-strip { display: grid; grid-template-columns: 75px 1fr auto; align-items: center; gap: 15px; padding: 12px 17px; background: var(--ink); color: #fff; border-radius: 12px; }
+.current-note-strip > div { display: flex; align-items: baseline; gap: 9px; border-right: 1px solid #3b5061; }
+.current-note-strip > div span { color: #9db0bc; font-size: 9px; }
+.current-note-strip > div strong { color: var(--mint); font-size: 25px; }
+.current-note-strip p { margin: 0; color: #b4c2ca; font-size: 11px; }
+.current-note-strip p b { color: #fff; }
+.current-note-strip .icon-button { background: #213b50; border-color: #3b5365; color: var(--mint); }
+.score-prereqs { padding: 19px 21px; border: 1px solid #c7ddd5; border-radius: 14px; background: #eaf6f0; }
+.prereq-title { display: flex; align-items: center; gap: 8px; color: #177767; font-size: 12px; font-weight: 800; margin-bottom: 12px; }
+.prereq-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+.prereq-tags .tag { background: rgba(255,255,255,.75); border: 1px solid rgba(23,119,103,.1); }
+.prereq-bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid #cee3da; margin-top: 14px; padding-top: 13px; }
+.prereq-bottom p { margin: 0; color: #56736d; font-size: 10px; line-height: 1.7; }
+.prereq-bottom > div { display: flex; gap: 7px; flex: 0 0 auto; }
+.locator-details { border: 1px solid #dcded7; background: var(--card); border-radius: 13px; padding: 0 16px; }
+.locator-details summary { min-height: 48px; display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 12px; font-weight: 750; list-style-position: inside; }
+.locator-details summary span { color: var(--muted); font-size: 9px; font-weight: 500; }
+.locator-details .fretboard-scroll { margin-bottom: 16px; }
+.score-complete { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 5px 2px; }
+.score-complete > span { color: var(--muted); font-size: 10px; }
+.chord-score-sheet { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 18px; background: #fffefa; border: 1px solid #e0ded4; border-radius: 17px; }
+.chord-score-bar { padding: 14px; border: 1px solid #e1e1d8; border-radius: 12px; background: #f7f5ed; }
+.chord-score-bar.active { border-color: var(--coral); background: var(--coral-pale); box-shadow: 0 5px 16px rgba(255,141,112,.14); }
+.chord-score-title { display: flex; flex-direction: column; gap: 7px; }
+.chord-score-title > span { color: var(--muted); font-size: 9px; }
+.chord-score-title > button { border: 0; background: none; padding: 0; display: flex; align-items: center; justify-content: space-between; font-size: 27px; font-weight: 800; cursor: pointer; }
+.chord-score-title svg { color: var(--mint-dark); }
+.strum-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 15px; }
+.strum-grid button { height: 60px; border: 1px solid #d8d9d0; border-radius: 7px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
+.strum-grid button.active { background: var(--coral); color: var(--ink); }
+.strum-grid b { font-size: 23px; line-height: 1; }
+.strum-grid span { font-size: 8px; margin-top: 4px; }
+.chord-score-bar > p { margin: 10px 0 0; color: var(--muted); font-size: 8px; text-align: center; }
+.score-chord-reference { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.score-chord-reference > div { display: flex; flex-direction: column; align-items: center; padding: 14px; border: 1px solid #e0e2db; background: var(--card); border-radius: 12px; text-align: center; }
+.score-chord-reference .chord-diagram { max-width: 125px; }
+.score-chord-reference > div > b { font-size: 18px; margin-top: -10px; }
+.score-chord-reference > div > span { color: var(--muted); font-size: 9px; line-height: 1.6; margin-top: 7px; }
+@media (max-width: 900px) {
+  .score-bars { grid-template-columns: 1fr; }
+  .score-bar { min-height: 160px; }
+  .chord-score-sheet, .score-chord-reference { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .score-title { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .score-title h3 { font-size: 29px; }
+  .score-player-toolbar { align-items: stretch; }
+  .player-main-buttons { width: 100%; }
+  .player-main-buttons .button { flex: 1; }
+  .score-player-toolbar > .range-label { min-width: 140px; }
+  .score-sheet { padding: 12px 8px; overflow-x: auto; }
+  .sheet-header { margin-inline: 7px; }
+  .sheet-header b { font-size: 10px; }
+  .score-bars { min-width: 530px; }
+  .score-bar { min-height: 160px; }
+  .prereq-bottom { align-items: flex-start; flex-direction: column; }
+  .score-complete { align-items: flex-start; flex-direction: column; }
+  .current-note-strip { grid-template-columns: 65px 1fr auto; gap: 9px; padding: 10px; }
+  .current-note-strip p { font-size: 9px; }
+  .locator-details summary span { display: none; }
+  .chord-score-sheet { padding: 10px; gap: 7px; }
+  .chord-score-bar { padding: 10px; }
+  .chord-score-title > button { font-size: 23px; }
+  .score-chord-reference { gap: 7px; }
+  .score-chord-reference > div { padding: 9px; }
+}
