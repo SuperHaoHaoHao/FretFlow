@@ -31,9 +31,13 @@ npm run preview
 
 生产文件输出到 `dist/`。`vite.config.ts` 已设置 `base: './'`，可部署在域名子路径下。
 
-## Gitee Pages
+## 静态部署
 
-将 `dist/` 中的内容发布到 Gitee Pages 的静态站点根目录即可。Gitee 账号实名认证、Pages 权限与发布操作需要在账号所有者自己的 Gitee 后台完成，本项目不自动上传或发布。若暂时不使用 Pages，直接运行上面的本地预览命令即可。
+`npm run build` 的产物输出到 `dist/`。`vite.config.ts` 已设置 `base: './'`，可部署在域名子路径下。仓库的 `docs/` 目录保存了最新静态构建产物，可供静态托管平台直接发布。
+
+Gitee Pages 当前处于暂停服务状态，仓库的「服务」菜单中没有 Pages 入口，不能通过命令行强制开启。`docs/` 已推送到 `main` 分支，若 Gitee 日后恢复 Pages，可直接选择 `main` 分支的 `docs` 目录。
+
+需要立即获得公网地址时，可将仓库导入 EdgeOne Pages、Cloudflare Pages 或 Vercel，构建命令使用 `npm run build`，输出目录使用 `dist`。只在本机使用时，运行 `npm run preview` 即可。
 
 ## 内容与版权说明
 
