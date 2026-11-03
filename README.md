@@ -35,9 +35,21 @@ npm run preview
 
 `npm run build` 的产物输出到 `dist/`。`vite.config.ts` 已设置 `base: './'`，可部署在域名子路径下。仓库的 `docs/` 目录保存了最新静态构建产物，可供静态托管平台直接发布。
 
-Gitee Pages 当前处于暂停服务状态，仓库的「服务」菜单中没有 Pages 入口，不能通过命令行强制开启。`docs/` 已推送到 `main` 分支，若 Gitee 日后恢复 Pages，可直接选择 `main` 分支的 `docs` 目录。
+GitHub Pages 已启用，公网地址为 **https://superhaohaohao.github.io/FretFlow/**。源码位于 `main` 分支，Pages 使用 `gh-pages` 分支；Gitee 的 `origin` 与 GitHub 的 `github` 两个远程仓库同时保留。
 
-需要立即获得公网地址时，可将仓库导入 EdgeOne Pages、Cloudflare Pages 或 Vercel，构建命令使用 `npm run build`，输出目录使用 `dist`。只在本机使用时，运行 `npm run preview` 即可。
+更新网站时执行：
+
+```bash
+npm run build
+cp -R dist/. docs/
+git add docs
+git commit -m "deploy: 更新静态网站"
+git push origin main
+git push github main
+git push github $(git subtree split --prefix=docs):gh-pages
+```
+
+Gitee Pages 当前处于暂停服务状态，因此不使用 Gitee 的页面托管功能。只在本机使用时，运行 `npm run preview` 即可。
 
 ## 内容与版权说明
 
