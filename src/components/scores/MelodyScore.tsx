@@ -2,10 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { Check, ChevronLeft, ChevronRight, Eye, EyeOff, Pause, Play, Repeat2, Volume2 } from 'lucide-react'
 import { getEventSustainBeats, scoreEventNote, type MelodyScore as MelodyScoreData } from '../../data/scores'
 import { guitarAudio } from '../../lib/audio'
-import type { GuitarNote } from '../../lib/music'
+import { getFinger, type GuitarNote } from '../../lib/music'
 import { CompleteButton, Tag, VideoLink } from '../ui/Common'
-import { Fretboard } from '../fretboard/Fretboard'
+import { PositionMap } from '../fretboard/PositionMap'
 import { JianpuNote } from '../music/JianpuNote'
+import { TablatureStaff } from './TablatureStaff'
 
 interface Props {
   score: MelodyScoreData
@@ -14,6 +15,8 @@ interface Props {
   onOpenPosition: (position: '1' | '2' | '5') => void
 }
 
+const FINGER_NAMES = ['食指', '中指', '无名指', '小拇指']
+
 export function MelodyScore({ score, completed, onComplete, onOpenPosition }: Props) {
   const [current, setCurrent] = useState(0)
   const [playing, setPlaying] = useState(false)
@@ -21,10 +24,12 @@ export function MelodyScore({ score, completed, onComplete, onOpenPosition }: Pr
   const [loop, setLoop] = useState('off')
   const [metronome, setMetronome] = useState(false)
   const [hideTab, setHideTab] = useState(false)
-  const [locator, setLocator] = useState<GuitarNote | null>(null)
+  const [locator, setLocator] = useState<{ note: GuitarNote; eventIndex: number } | null>(null)
   const bars = Array.from(new Set(score.events.map((event) => event.bar)))
   const currentEvent = score.events[current]
   const currentNote = scoreEventNote(currentEvent)
+  const currentFinger = currentNote ? getFinger(currentNote.fret, score.position) : null
+  const locatedNote = locator?.eventIndex === current ? locator.note : currentNote
 
   const rangeForLoop = useCallback(() => {
     if (!/^\d+$/.test(loop)) return { start: 0, end: score.events.length - 1 }
@@ -65,7 +70,8 @@ export function MelodyScore({ score, completed, onComplete, onOpenPosition }: Pr
   function selectEvent(index: number) {
     setCurrent(index)
     const note = scoreEventNote(score.events[index])
-    if (note) { setLocator(note); guitarAudio.playNote(note.midi, 0.65) }
+    setLocator(note ? { note, eventIndex: index } : null)
+    if (note) guitarAudio.playNote(note.midi, 0.65)
   }
 
   function changeLoop(value: string) {
@@ -86,21 +92,15 @@ export function MelodyScore({ score, completed, onComplete, onOpenPosition }: Pr
         <button type="button" className="tool-toggle" aria-pressed={hideTab} onClick={() => setHideTab(!hideTab)}>{hideTab ? <Eye size={16} /> : <EyeOff size={16} />}{hideTab ? '显示弦品' : '隐藏弦品'}</button>
       </div>
       <div className="score-progress"><span>第 {currentEvent.bar} 小节 · 第 {current + 1}/{score.events.length} 音</span><progress max={score.events.length} value={current + 1} /></div>
-      <div className="score-sheet" aria-label={`${score.title}简谱和六线谱`}>
-        <div className="sheet-header"><span>{score.key} · {score.time} 拍</span><b>慢练，也要每个音都清楚</b></div>
-        <div className="score-bars">{bars.map((bar) => <div className={currentEvent.bar === bar ? 'score-bar current' : 'score-bar'} key={bar}><div className="bar-number">{String(bar).padStart(2, '0')}<span>小节</span></div><div className="bar-events">{score.events.map((event, index) => ({ event, index })).filter(({ event }) => event.bar === bar).map(({ event, index }) => {
-          const note = scoreEventNote(event)
-          return <button type="button" key={index} className={`${current === index ? 'melody-note active' : 'melody-note'} ${event.tie === 'toNext' ? 'tie-next' : ''} ${event.tie === 'fromPrev' ? 'tie-from' : ''}`} style={{ flex: event.beats }} onClick={() => selectEvent(index)} aria-label={`第${bar}小节，简谱${event.syllable}${event.string ? `，${event.string}弦${event.fret}品` : '，休止'}，${event.beats}拍${event.lyric ? `，歌词${event.lyric}` : ''}${event.tie === 'fromPrev' ? '，延续前音' : ''}`}>
-            <span className="note-syllable">{note ? <JianpuNote midi={note.midi} /> : <b>0</b>}</span>
-            <span className={event.beats === .5 || event.beats === 1.5 ? 'note-duration is-eighth' : 'note-duration'}>{event.beats === 1.5 || event.beats === 2 ? '—' : event.beats === 4 ? '— — —' : ''}</span>
-            <span className="six-lines">{[1, 2, 3, 4, 5, 6].map((string) => <i key={string}>{!hideTab && event.string === string ? event.fret : ''}</i>)}</span>
-            <span className="note-lyric">{event.lyric ?? (event.tie === 'fromPrev' ? '延音' : '')}</span><small>{event.beats}拍</small>
-          </button>
-        })}</div></div>)}</div>
+      <div className="score-linked-workspace">
+        <PositionMap position={score.position} selected={locatedNote} onSelect={(note) => { setLocator({ note, eventIndex: current }); guitarAudio.playNote(note.midi, 0.6) }} />
+        <div className="score-sheet" aria-label={`${score.title}简谱和六线谱`}>
+          <div className="sheet-header"><span>{score.key} · {score.time} 拍</span><b>对照左侧把位，慢慢弹清楚</b></div>
+          <TablatureStaff events={score.events} bars={bars} current={current} hideTab={hideTab} onSelect={selectEvent} />
+        </div>
       </div>
-      <div className="current-note-strip" aria-live="polite"><div><span>当前音</span><strong>{currentNote ? <JianpuNote midi={currentNote.midi} /> : '0'}</strong></div><p>{currentNote ? <><b>{currentNote.fullName}</b> · {currentNote.string} 弦 {currentNote.fret} 品{currentEvent.lyric ? ` · 唱「${currentEvent.lyric}」` : ''}{currentEvent.tie === 'fromPrev' ? ' · 延续前音，不重新拨弦' : ''}</> : '休止：保持安静，但节拍继续向前走'}</p><button type="button" className="icon-button" disabled={!currentNote} aria-label="试听当前音" onClick={() => currentNote && guitarAudio.playNote(currentNote.midi, 0.7)}><Volume2 size={18} /></button></div>
+      <div className="current-note-strip" aria-live="polite"><div><span>当前音</span><strong>{currentNote ? <JianpuNote midi={currentNote.midi} /> : '0'}</strong></div><p>{currentNote ? <><b>{currentNote.fullName}</b> · {currentNote.string} 弦 {currentNote.fret} 品{currentFinger ? ` · ${FINGER_NAMES[currentFinger - 1]}` : ''}{currentEvent.lyric ? ` · 唱「${currentEvent.lyric}」` : ''}{currentEvent.tie === 'fromPrev' ? ' · 延续前音，不重新拨弦' : ''}</> : '休止：保持安静，但节拍继续向前走'}</p><button type="button" className="icon-button" disabled={!currentNote} aria-label="试听当前音" onClick={() => currentNote && guitarAudio.playNote(currentNote.midi, 0.7)}><Volume2 size={18} /></button></div>
       <div className="score-prereqs"><div className="prereq-title"><Check size={18} /><span>这张谱会用到</span></div><div className="prereq-tags"><Tag tone="mint" onClick={() => onOpenPosition(score.position)}>{score.positionLabel}</Tag>{score.chords.map((chord) => <Tag key={chord}>{chord}</Tag>)}<Tag>{score.key}</Tag><Tag>{score.time} 拍</Tag>{score.techniques.map((technique) => <Tag key={technique}>{technique}</Tag>)}<Tag tone="coral">从 {score.bpm} BPM 开始</Tag></div><div className="prereq-bottom"><p>{score.scope}</p><div><VideoLink page={score.videoPage}>课程讲解</VideoLink><VideoLink page={score.demoPage}>示范视频</VideoLink></div></div></div>
-      <details className="locator-details"><summary>打开谱面指板定位器 <span>点击当前音，看看它在哪里</span></summary><Fretboard position={score.position} displayMode="both" cMajorOnly hideNames={false} selected={locator ?? currentNote} onSelect={(note) => { setLocator(note); guitarAudio.playNote(note.midi, 0.6) }} /></details>
       <div className="score-complete"><CompleteButton complete={completed} onClick={() => onComplete(score.id)}>我已完成这首慢速练习</CompleteButton><span>能连续两遍不出错，再加 5 BPM。</span></div>
     </div>
   )
