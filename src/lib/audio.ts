@@ -40,8 +40,8 @@ class GuitarAudio {
     overtone.onended = () => this.active.delete(overtone)
   }
 
-  playChord(midis: number[], arpeggiate = false) {
-    midis.forEach((midi, index) => this.playNote(midi, arpeggiate ? 0.65 : 1.1, arpeggiate ? index * 0.12 : index * 0.018))
+  playChord(midis: number[], arpeggiate = false, duration = 1.1) {
+    midis.forEach((midi, index) => this.playNote(midi, arpeggiate ? 0.65 : duration, arpeggiate ? index * 0.12 : index * 0.018))
   }
 
   click(accent = false, when = 0) {

@@ -22,7 +22,7 @@ function initialTab(): MainTab {
 export default function App() {
   const [progress, setProgress] = useState<ProgressState>(loadProgress)
   const [tab, setTab] = useState<MainTab>(initialTab)
-  const [position, setPosition] = useState<PositionId>((['all', '1', '2', '4', '5'].includes(loadProgress().lastPosition) ? loadProgress().lastPosition : '5') as PositionId)
+  const [position, setPosition] = useState<PositionId>((['all', '1', '2', '4', '5', 'mi'].includes(loadProgress().lastPosition) ? loadProgress().lastPosition : '5') as PositionId)
   const [scoreId, setScoreId] = useState(window.location.hash.split('/')[1] ?? 'little-star')
   const [notice, setNotice] = useState('')
 
@@ -98,7 +98,7 @@ export default function App() {
       {tab === 'chords' && <div role="tabpanel" id="panel-主导航-chords" aria-labelledby="tab-主导航-chords"><ChordWorkshop chordBest={progress.chordBest} onChordBest={saveChordBest} onOpenScore={(id) => navigate('scores', { score: id })} /></div>}
       {tab === 'scores' && <div role="tabpanel" id="panel-主导航-scores" aria-labelledby="tab-主导航-scores"><ScorePage selectedId={scoreId} onSelect={(id) => navigate('scores', { score: id })} completed={progress.completedScores} onComplete={completeScore} onOpenPosition={(next) => navigate('fretboard', { position: next })} onOpenChords={() => navigate('chords')} /></div>}
     </main>
-    <footer className="site-footer"><div className="footer-brand"><b>弦上 FRETFLOW</b><span>每天一小节，指尖有答案。</span></div><p>学习伴侣，不替代课程本身。谱面为入门练习整理；《天下》为简化编配。</p><div>{COURSE_LINKS.slice(0, 1).map((link) => <a key={link.page} href={COURSE.baseUrl} target="_blank" rel="noreferrer">课程来源：{COURSE.author}<ExternalLink size={13} /></a>)}</div></footer>
+    <footer className="site-footer"><div className="footer-brand"><b>弦上 FRETFLOW</b><span>每天一小节，指尖有答案。</span></div><p>学习伴侣，不替代课程本身。《青花瓷》按课程截图整理；《天下》为强力和弦教学改编与 DJ 四音片段。</p><div>{COURSE_LINKS.slice(0, 1).map((link) => <a key={link.page} href={COURSE.baseUrl} target="_blank" rel="noreferrer">课程来源：{COURSE.author}<ExternalLink size={13} /></a>)}</div></footer>
     <div className={notice ? 'toast visible' : 'toast'} role="status" aria-live="polite"><CheckCircle2 size={18} />{notice}</div>
   </div>
 }

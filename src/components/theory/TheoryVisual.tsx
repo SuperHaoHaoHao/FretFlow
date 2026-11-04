@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 import { Pause, Play, Volume2 } from 'lucide-react'
 import { guitarAudio } from '../../lib/audio'
 import { getNote, STRING_MIDI } from '../../lib/music'
+import { JianpuNote } from '../music/JianpuNote'
 
 export function TheoryVisual({ topic }: { topic: string }) {
   switch (topic) {
     case 'tab': return <TabDiagram />
-    case 'notes': return <PitchDiagram />
+    case 'notes':
+    case 'jianpu': return <PitchDiagram />
     case 'rhythm': return <RhythmDiagram />
     case 'position': return <PositionDiagram />
     case 'chords': return <ChordDiagram />
@@ -35,7 +37,8 @@ function TabDiagram() {
 function PitchDiagram() {
   const [active, setActive] = useState<number | null>(null)
   const scale = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C']
-  return <div className="visual-card"><div className="visual-topline"><span>点击音阶，建立音高感</span><Volume2 size={17} /></div><div className="pitch-ladder">{scale.map((note, index) => <button key={`${note}-${index}`} type="button" className={active === index ? 'pitch-step active' : 'pitch-step'} style={{ '--step': index } as React.CSSProperties} onClick={() => { setActive(index); guitarAudio.playNote(60 + [0, 2, 4, 5, 7, 9, 11, 12][index], 0.6) }}><span>{note}</span><b>{index === 7 ? '1̇' : index + 1}</b><small>{['do', 're', 'mi', 'fa', 'sol', 'la', 'si', 'do'][index]}</small></button>)}</div><div className="staff-mini" aria-label="C 大调五线谱示意">{[0, 1, 2, 3, 4].map((line) => <i key={line} />)}<div className="staff-notes">{scale.map((_, index) => <b key={index} style={{ bottom: `${index * 7 + 2}px`, left: `${index * 11 + 4}%` }} />)}</div><span className="treble">𝄞</span></div><p className="visual-caption">同一组音在简谱、音名和五线谱上的三种表达。</p></div>
+  const octaveExamples = [48, 59, 60, 72]
+  return <div className="visual-card"><div className="visual-topline"><span>点击音阶，建立音高感</span><Volume2 size={17} /></div><div className="pitch-ladder">{scale.map((note, index) => { const midi = 60 + [0, 2, 4, 5, 7, 9, 11, 12][index]; return <button key={`${note}-${index}`} type="button" className={active === index ? 'pitch-step active' : 'pitch-step'} style={{ '--step': index } as React.CSSProperties} onClick={() => { setActive(index); guitarAudio.playNote(midi, 0.6) }}><span>{note}</span><JianpuNote midi={midi} /></button> })}</div><div className="octave-examples">{octaveExamples.map((midi, index) => <button type="button" key={midi} onClick={() => guitarAudio.playNote(midi, 0.65)}><span>{['C3', 'B3', 'C4', 'C5'][index]}</span><JianpuNote midi={midi} /></button>)}</div><p className="visual-caption">C4–B4 是本课程的中音区。对比低音 3、低音 7、中音 1 和高音 1，点只标在数字上下。</p></div>
 }
 
 function RhythmDiagram() {

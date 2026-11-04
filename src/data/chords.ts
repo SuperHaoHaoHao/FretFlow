@@ -24,6 +24,9 @@ export const CHORDS: ChordDef[] = [
   { id: 'D5', name: 'D5', family: '五和弦', quality: '根音 + 五音 · 明亮、现代', root: 'D', difficulty: 2, strings: [-1, 3, 2, 0, -1, -1], fingers: [{ string: 2, fret: 3, finger: 3 }, { string: 3, fret: 2, finger: 2 }], tip: '只扫二、三、四弦，先慢速确认三个音。', mistake: '一弦被误扫，产生额外音高。' },
   { id: 'G5', name: 'G5', family: '五和弦', quality: '根音 + 五音 · 厚实、摇滚', root: 'G', difficulty: 3, strings: [-1, -1, -1, 5, 5, 3], fingers: [{ string: 4, fret: 5, finger: 4 }, { string: 5, fret: 5, finger: 3 }, { string: 6, fret: 3, finger: 2 }], tip: '保持手指整体形状，把它想成可移动的架子。', mistake: '移动后手指塌陷，闷住不该闷的弦。' },
   { id: 'C5', name: 'C5', family: '五和弦', quality: '根音 + 五音 · 扎实、集中', root: 'C', difficulty: 3, strings: [-1, -1, 5, 5, 3, -1], fingers: [{ string: 3, fret: 5, finger: 4 }, { string: 4, fret: 5, finger: 3 }, { string: 5, fret: 3, finger: 2 }], tip: '从五弦三品出发，和 G5 使用相同手型。', mistake: '从六弦开始扫，低音变得模糊。' },
+  { id: 'B5', name: 'B5', family: '五和弦', quality: '强力和弦 · 根音 B + 五音 F♯', root: 'B', difficulty: 2, strings: [-1, -1, 4, 4, 2, -1], fingers: [{ string: 3, fret: 4, finger: 4 }, { string: 4, fret: 4, finger: 3 }, { string: 5, fret: 2, finger: 1 }], tip: '从五弦二品开始，保持 A5 的手型整体上移两品。', mistake: '扫到六弦空弦，根音会变得不清楚。' },
+  { id: 'G#5', name: 'G♯5', family: '五和弦', quality: '强力和弦 · 根音 G♯ + 五音 D♯', root: 'G♯', difficulty: 3, strings: [-1, -1, -1, 6, 6, 4], fingers: [{ string: 4, fret: 6, finger: 4 }, { string: 5, fret: 6, finger: 3 }, { string: 6, fret: 4, finger: 1 }], tip: '从六弦四品开始，只扫六、五、四弦。', mistake: '把它当成 G♯ 大三或小三和弦；强力和弦本身没有三音。' },
+  { id: 'C#5', name: 'C♯5', family: '五和弦', quality: '强力和弦 · 根音 C♯ + 五音 G♯', root: 'C♯', difficulty: 3, strings: [-1, -1, 6, 6, 4, -1], fingers: [{ string: 3, fret: 6, finger: 4 }, { string: 4, fret: 6, finger: 3 }, { string: 5, fret: 4, finger: 1 }], tip: '从五弦四品开始，保持手型，只扫五、四、三弦。', mistake: '从六弦开始扫，加入不属于这个手型的低音。' },
 ]
 
 export const SWITCH_PAIRS = [

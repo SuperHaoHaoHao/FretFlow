@@ -77,7 +77,7 @@ export function ChordWorkshop({ onOpenScore, chordBest, onChordBest }: ChordWork
 
   return (
     <section className="page-section chords-page" id="chords">
-      <SectionHeading eyebrow="CHORD WORKSHOP" title="和弦工坊，从按响到换稳" description="先看懂每根手指为什么在那里，再用计时器练切换。网站不会假装听见你的琴，成绩由你真实点击记录。" action={<Tag tone="coral">11 个入门和弦</Tag>} />
+      <SectionHeading eyebrow="CHORD WORKSHOP" title="和弦工坊，从按响到换稳" description="先看懂每根手指为什么在那里，再用计时器练切换。网站不会假装听见你的琴，成绩由你真实点击记录。" action={<Tag tone="coral">{CHORDS.length} 个入门和弦</Tag>} />
       <Tabs label="和弦学习区域" value={area} onChange={setArea} items={[{ id: 'library', label: '和弦图书馆', icon: <Music size={16} /> }, { id: 'switch', label: '和弦切换训练', icon: <Timer size={16} /> }]} />
       {area === 'library' ? <div className="chord-library">
         <div className="chord-browser">
@@ -107,7 +107,7 @@ export function ChordWorkshop({ onOpenScore, chordBest, onChordBest }: ChordWork
         </div>
         <div className="switch-mini-diagrams"><div><ChordDiagram chord={fromChord} compact /><b>{pair.from}</b></div><ArrowRight size={24} /><div><ChordDiagram chord={toChord} compact /><b>{pair.to}</b></div></div>
       </div>}
-      <div className="tianxia-card"><div><span className="eyebrow">FIRST SONG · 入门简化版</span><h3>《天下》四和弦练习</h3><p><b>Em — C — G — D</b>，每个和弦四拍，只用下拨。也可以换成五和弦手型，体验更摇滚的声音。</p><div className="tag-row"><Tag>4/4 拍</Tag><Tag>建议 50 BPM</Tag><Tag tone="coral">非官方原谱</Tag></div></div><div className="tianxia-chords">{['Em', 'C', 'G', 'D'].map((id) => <button type="button" key={id} onClick={() => guitarAudio.playChord(getChordMidis(CHORDS.find((chord) => chord.id === id)!))}>{id}<Volume2 size={14} /></button>)}</div><button type="button" className="button button-light" onClick={() => onOpenScore('tianxia')}>打开完整练习谱 <ArrowRight size={17} /></button></div>
+      <div className="tianxia-card"><div><span className="eyebrow">POWER CHORDS + SOLO · 双轨练习</span><h3>《天下》强力和弦与 Solo 片段</h3><p><b>A5 — B5 — G♯5 — C♯5</b>，先练可移动强力和弦手型，再学公开 DJ 附谱视频里的四音 Solo 片段。</p><div className="tag-row"><Tag>4/4 拍</Tag><Tag>参考 72 BPM</Tag><Tag tone="coral">教学改编 · 非原曲分轨</Tag></div></div><div className="tianxia-chords">{['A5', 'B5', 'G#5', 'C#5'].map((id) => { const chord = CHORDS.find((item) => item.id === id)!; return <button type="button" key={id} onClick={() => guitarAudio.playChord(getChordMidis(chord))}>{chord.name}<Volume2 size={14} /></button> })}</div><button type="button" className="button button-light" onClick={() => onOpenScore('tianxia')}>打开双轨练习谱 <ArrowRight size={17} /></button></div>
     </section>
   )
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { C_MAJOR, getFinger, getNote, isInPosition, STRING_NAMES, type GuitarNote, type PositionId } from '../../lib/music'
+import { JianpuNote } from '../music/JianpuNote'
 
 interface FretboardProps {
   position: PositionId
@@ -14,7 +15,7 @@ interface FretboardProps {
 
 export function Fretboard({ position, displayMode, cMajorOnly, hideNames, selected, highlighted = [], onSelect, correctTarget }: FretboardProps) {
   const [focused, setFocused] = useState({ string: 1, fret: 5 })
-  const frets = Array.from({ length: 13 }, (_, index) => index)
+  const frets = Array.from({ length: 16 }, (_, index) => index)
 
   function moveFocus(event: React.KeyboardEvent, string: number, fret: number) {
     let nextString = string
@@ -24,17 +25,19 @@ export function Fretboard({ position, displayMode, cMajorOnly, hideNames, select
     else if (event.key === 'ArrowDown') nextString += 1
     else if (event.key === 'ArrowUp') nextString -= 1
     else if (event.key === 'Home') nextFret = 0
-    else if (event.key === 'End') nextFret = 12
+    else if (event.key === 'End') nextFret = 15
     else return
-    if (nextString < 1 || nextString > 6 || nextFret < 0 || nextFret > 12) return
+    if (nextString < 1 || nextString > 6 || nextFret < 0 || nextFret > 15) return
     event.preventDefault()
     setFocused({ string: nextString, fret: nextFret })
-    document.getElementById(`fret-${nextString}-${nextFret}`)?.focus()
+    const target = document.getElementById(`fret-${nextString}-${nextFret}`)
+    target?.focus()
+    target?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
   }
 
   return (
     <div className="fretboard-scroll" aria-label="吉他指板，使用方向键移动，回车发声">
-      <div className="fretboard" role="grid" aria-rowcount={6} aria-colcount={13}>
+      <div className="fretboard" role="grid" aria-rowcount={6} aria-colcount={16}>
         <div className="fret-numbers" role="row"><span />{frets.map((fret) => <b key={fret} className={isInPosition(fret, position) ? 'in-position' : ''}>{fret === 0 ? '空' : fret}</b>)}</div>
         {[1, 2, 3, 4, 5, 6].map((string) => <div className="fret-row" role="row" key={string}>
           <span className="string-label"><b>{string}</b><small>{STRING_NAMES[string - 1]}</small></span>
@@ -46,7 +49,6 @@ export function Fretboard({ position, displayMode, cMajorOnly, hideNames, select
             const isHighlighted = highlighted.some((item) => item.string === string && item.fret === fret)
             const isTarget = correctTarget?.string === string && correctTarget.fret === fret
             const dimmed = !inPosition || (cMajorOnly && !isNatural)
-            const label = displayMode === 'name' ? note.name : displayMode === 'syllable' ? note.syllable : `${note.name}·${note.syllable}`
             const finger = getFinger(fret, position)
             return <button
               id={`fret-${string}-${fret}`}
@@ -55,13 +57,13 @@ export function Fretboard({ position, displayMode, cMajorOnly, hideNames, select
               key={fret}
               tabIndex={focused.string === string && focused.fret === fret ? 0 : -1}
               className={`fret-note ${dimmed ? 'dimmed' : ''} ${isSelected ? 'selected' : ''} ${isHighlighted ? 'highlighted' : ''} ${isTarget ? 'target' : ''}`}
-              aria-label={`${string}弦${fret}品，${hideNames && !isTarget ? '答案已隐藏' : `${note.fullName}，简谱${note.syllable}`}`}
+              aria-label={`${string}弦${fret}品，${hideNames && !isTarget ? '答案已隐藏' : `${note.fullName}，简谱${note.syllable}，唱名${note.solfege}`}`}
               aria-pressed={isSelected}
               onFocus={() => setFocused({ string, fret })}
               onKeyDown={(event) => moveFocus(event, string, fret)}
               onClick={() => onSelect(note)}
             >
-              <span>{hideNames && !isTarget ? '?' : label}</span>
+              <span className="fret-note-content">{hideNames && !isTarget ? '?' : displayMode === 'name' ? note.name : <JianpuNote midi={note.midi} showSolfege={displayMode === 'both'} />}</span>
               {finger && inPosition && !hideNames && <small>{finger}</small>}
             </button>
           })}

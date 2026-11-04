@@ -24,7 +24,10 @@
 .melody-note:first-child { border-left: 0; }
 .melody-note:hover { background: #edf5f0; }
 .melody-note.active { background: #ffe5da; border-radius: 6px; color: #a84f3c; z-index: 2; box-shadow: 0 0 0 1px var(--coral); }
-.note-syllable { height: 26px; font-family: ui-monospace, monospace; font-size: 19px; }
+.note-syllable { height: 40px; display: grid; place-items: center; font-family: ui-monospace, monospace; font-size: 19px; }
+.note-lyric { min-height: 16px; margin-top: 5px; color: #68685f; font-size: 9px; line-height: 1.4; }
+.melody-note.tie-from { background: rgba(119,228,212,.09); }
+.melody-note.tie-next::after { content: ""; position: absolute; z-index: 3; top: 1px; left: 50%; width: 100%; height: 12px; border-top: 2px solid #7f8d86; border-radius: 50%; pointer-events: none; }
 .note-duration { height: 8px; font-size: 9px; display: grid; place-items: center; }
 .note-duration.is-eighth::after { content: ""; width: 15px; height: 2px; background: currentColor; }
 .six-lines { display: flex; flex-direction: column; width: 100%; margin-top: 6px; }
@@ -69,6 +72,20 @@
 .score-chord-reference .chord-diagram { max-width: 125px; }
 .score-chord-reference > div > b { font-size: 18px; margin-top: -10px; }
 .score-chord-reference > div > span { color: var(--muted); font-size: 9px; line-height: 1.6; margin-top: 7px; }
+.solo-fragment-sheet { padding: 24px; border: 1px solid #e0ded4; border-radius: 17px; background: #fffefa; }
+.solo-fragment-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.solo-fragment-heading h3 { margin: 7px 0 0; font-size: 25px; }
+.solo-fragment-sheet > p { color: var(--muted); font-size: 11px; line-height: 1.7; }
+.solo-note-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+.solo-note { min-height: 170px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; border: 1px solid #dfe2d9; border-radius: 12px; background: #f7f8f2; cursor: pointer; }
+.solo-note.active { border-color: var(--coral); background: var(--coral-pale); box-shadow: 0 5px 16px rgba(255,141,112,.14); }
+.solo-jianpu { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.solo-jianpu b { font-family: ui-monospace, monospace; font-size: 30px; }
+.solo-jianpu small { color: var(--coral-dark); font-size: 11px; }
+.solo-note > strong { font-size: 17px; }
+.solo-note > span:not(.solo-jianpu) { color: var(--mint-dark); font-size: 12px; font-weight: 750; }
+.solo-note > small { color: var(--muted); font-size: 9px; }
+.solo-current-note { margin-top: 15px; padding: 12px; border-radius: 9px; background: var(--ink); color: var(--mint); font-size: 12px; text-align: center; }
 @media (max-width: 900px) {
   .score-bars { grid-template-columns: 1fr; }
   .score-bar { min-height: 160px; }
@@ -96,4 +113,7 @@
   .chord-score-title > button { font-size: 23px; }
   .score-chord-reference { gap: 7px; }
   .score-chord-reference > div { padding: 9px; }
+  .solo-fragment-sheet { padding: 16px 12px; }
+  .solo-note-grid { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+  .solo-note { min-height: 145px; }
 }
